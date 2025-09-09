@@ -31,6 +31,20 @@ export default function Dashboard() {
   React.useEffect(() => {
     console.log('API Base URL:', process.env.NEXT_PUBLIC_API_URL);
     console.log('App URL:', process.env.NEXT_PUBLIC_APP_URL);
+    
+    // Test backend connectivity immediately
+    const testBackend = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+        console.log('Testing backend at:', apiUrl);
+        const response = await fetch(apiUrl);
+        console.log('Backend response:', response.status, response.statusText);
+      } catch (error) {
+        console.error('Backend connection error:', error);
+      }
+    };
+    
+    testBackend();
   }, []);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
