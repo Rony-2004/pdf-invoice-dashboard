@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Document, Page } from 'react-pdf';
 import { Button } from '@/components/ui/button';
 import { ZoomIn, ZoomOut, ChevronLeft, ChevronRight } from 'lucide-react';
-import { pdfjs } from '@/lib/pdf-config';
+import { pdfjs, configurePDFWorker } from '@/lib/pdf-config';
 
 // Required imports for react-pdf
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -13,12 +13,18 @@ import 'react-pdf/dist/Page/TextLayer.css';
 interface PDFViewerProps {
   file: File | null;
   onLoadSuccess?: (numPages: number) => void;
+  onError?: () => void;
 }
 
-export const PDFViewer: React.FC<PDFViewerProps> = ({ file, onLoadSuccess }) => {
+export const PDFViewer: React.FC<PDFViewerProps> = ({ file, onLoadSuccess, onError }) => {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [scale, setScale] = useState<number>(1.0);
+
+  // Ensure PDF worker is configured on mount
+  useEffect(() => {
+    configurePDFWorker();
+  }, []);
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     console.log('PDF loaded successfully with', numPages, 'pages');
@@ -30,6 +36,14 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ file, onLoadSuccess }) => 
   const onDocumentLoadError = (error: Error) => {
     console.error('PDF load error:', error);
     console.error('Worker src:', pdfjs.GlobalWorkerOptions.workerSrc);
+    console.error('PDF.js version:', pdfjs.version);
+    console.error('File type:', file?.type);
+    console.error('File size:', file?.size);
+    
+    // Call the error callback if provided
+    if (onError) {
+      onError();
+    }
   };
 
   const changePage = (offset: number) => {

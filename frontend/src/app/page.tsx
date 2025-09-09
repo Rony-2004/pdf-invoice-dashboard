@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { InvoiceForm } from '@/components/InvoiceForm';
+import { SimplePDFViewer } from '@/components/SimplePDFViewer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,6 +27,7 @@ export default function Dashboard() {
   const [isExtracting, setIsExtracting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [extractionProgress, setExtractionProgress] = useState(0);
+  const [pdfViewerError, setPdfViewerError] = useState(false);
 
   // Debug API URL
   React.useEffect(() => {
@@ -54,11 +56,18 @@ export default function Dashboard() {
         alert('File size must be less than 25MB');
         return;
       }
+      console.log('File selected:', {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        lastModified: file.lastModified
+      });
       setSelectedFile(file);
       setUploadedFile(null);
       setExtractedData(null);
     } else {
       alert('Please select a PDF file');
+      console.error('Invalid file type:', file?.type);
     }
   };
 
@@ -232,7 +241,43 @@ export default function Dashboard() {
             </div>
             
             <div className="h-[300px] sm:h-[400px] xl:h-[calc(100%-140px)] bg-gray-800/30">
-              <PDFViewer file={selectedFile} />
+              {pdfViewerError ? (
+                <div className="flex flex-col h-full">
+                  <div className="p-2 bg-yellow-900/30 border border-yellow-600/50 rounded-t-lg flex items-center justify-between">
+                    <p className="text-yellow-200 text-xs">Using fallback PDF viewer</p>
+                    <Button
+                      onClick={() => setPdfViewerError(false)}
+                      className="text-xs px-2 py-1 h-auto bg-blue-600 hover:bg-blue-500"
+                    >
+                      Try Advanced Viewer
+                    </Button>
+                  </div>
+                  <div className="flex-1">
+                    <SimplePDFViewer file={selectedFile} />
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col h-full">
+                  <div className="p-2 bg-gray-800/50 border-b border-gray-700/50 flex items-center justify-between">
+                    <p className="text-gray-300 text-xs">Advanced PDF viewer</p>
+                    <Button
+                      onClick={() => setPdfViewerError(true)}
+                      className="text-xs px-2 py-1 h-auto bg-gray-600 hover:bg-gray-500"
+                    >
+                      Use Simple Viewer
+                    </Button>
+                  </div>
+                  <div className="flex-1">
+                    <PDFViewer 
+                      file={selectedFile} 
+                      onError={() => {
+                        console.log('PDF Viewer failed, switching to Simple PDF Viewer');
+                        setPdfViewerError(true);
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

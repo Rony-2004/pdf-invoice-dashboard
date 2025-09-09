@@ -6,7 +6,8 @@ import mongoose from 'mongoose';
 import uploadRoutes from './routes/upload';
 import extractRoutes from './routes/extract';
 import invoiceRoutes from './routes/invoices';
-import { errorHandler } from './middleware/errorHandler';
+import pdfConvertRoutes from './routes/pdf-convert';
+// import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/pdf-dashb
 app.use('/api/upload', uploadRoutes);
 app.use('/api/extract', extractRoutes);
 app.use('/api/invoices', invoiceRoutes);
+app.use('/api/pdf-convert', pdfConvertRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -46,7 +48,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Error handling
-app.use(errorHandler);
+// app.use(errorHandler);
 
 // 404 handler - catch all routes
 app.use((req, res) => {

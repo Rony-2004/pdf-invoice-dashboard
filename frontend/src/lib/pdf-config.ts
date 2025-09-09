@@ -1,14 +1,18 @@
 import { pdfjs } from 'react-pdf';
 
-// Configure PDF.js worker for production
-if (typeof window !== 'undefined') {
-  // Use CDN for production, local for development
-  const workerSrc = process.env.NODE_ENV === 'production' 
-    ? `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
-    : '/pdf.worker.min.js';
+// Configure PDF.js worker for Vercel deployment
+const configurePDFWorker = () => {
+  if (typeof window !== 'undefined') {
+    // Always use CDN for better reliability
+    const workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+    pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
     
-  pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
-  console.log('PDF Worker configured:', workerSrc);
-}
+    console.log('PDF Worker configured:', workerSrc);
+    console.log('PDF.js version:', pdfjs.version);
+  }
+};
 
-export { pdfjs };
+// Configure immediately
+configurePDFWorker();
+
+export { pdfjs, configurePDFWorker };
