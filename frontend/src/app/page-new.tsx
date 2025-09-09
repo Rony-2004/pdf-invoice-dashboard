@@ -6,10 +6,34 @@ import { InvoiceForm } from '@/components/InvoiceForm';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Upload, FileText, Brain, List } from 'lucide-react';
 import { apiService } from '@/lib/api';
-import { UploadResponse, ExtractResponse, Invoice } from '@/types';
+import { UploadResponse, ExtractResponse } from '@/types';
+
+interface FormData {
+  vendor: {
+    name: string;
+    address?: string;
+    taxId?: string;
+  };
+  invoice: {
+    number: string;
+    date: string;
+    currency?: string;
+    subtotal?: number;
+    taxPercent?: number;
+    total?: number;
+    poNumber?: string;
+    poDate?: string;
+    lineItems: Array<{
+      description: string;
+      unitPrice: number;
+      quantity: number;
+      total: number;
+    }>;
+  };
+}
 import Link from 'next/link';
 
 export default function Dashboard() {
@@ -57,7 +81,7 @@ export default function Dashboard() {
 
     setIsExtracting(true);
     try {
-      const result = await apiService.extractData(uploadedFile.fileId, aiModel);
+      const result = await apiService.extractData(uploadedFile.fileId);
       setExtractedData(result);
       console.log('Data extracted successfully:', result);
     } catch (error) {
@@ -68,7 +92,7 @@ export default function Dashboard() {
     }
   };
 
-  const handleSave = async (formData: any) => {
+  const handleSave = async (formData: FormData) => {
     if (!uploadedFile) return;
 
     setIsSaving(true);
@@ -151,6 +175,7 @@ export default function Dashboard() {
                         value={aiModel}
                         onChange={(e) => setAiModel(e.target.value as 'gemini' | 'groq')}
                         className="px-3 py-1 border rounded-md text-sm"
+                        aria-label="Select AI model"
                       >
                         <option value="gemini">Gemini AI</option>
                         <option value="groq">Groq AI</option>
