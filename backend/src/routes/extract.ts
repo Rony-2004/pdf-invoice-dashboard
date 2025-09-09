@@ -2,6 +2,7 @@ import express from 'express';
 import { body, validationResult } from 'express-validator';
 import mongoose from 'mongoose';
 import { GridFSBucket } from 'mongodb';
+// @ts-ignore: pdf-parse has incomplete type definitions
 import pdf from 'pdf-parse';
 import { asyncHandler } from '../middleware/errorHandler';
 import { AIService } from '../services/aiService';
