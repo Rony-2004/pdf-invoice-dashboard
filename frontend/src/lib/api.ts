@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { ApiResponse, UploadResponse, ExtractResponse, Invoice } from '@/types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
+  ? `${process.env.NEXT_PUBLIC_API_URL}/api`
+  : 'http://localhost:3001/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

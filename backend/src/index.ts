@@ -20,7 +20,11 @@ app.use(helmet());
 // CORS configuration for production
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? process.env.CORS_ORIGIN || process.env.FRONTEND_URL || 'https://your-app.vercel.app'
+    ? [
+        'https://pdf-invoice-dashboard.vercel.app',
+        ...(process.env.CORS_ORIGIN ? [process.env.CORS_ORIGIN] : []),
+        ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : [])
+      ]
     : ['http://localhost:3000', 'http://localhost:3001'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
