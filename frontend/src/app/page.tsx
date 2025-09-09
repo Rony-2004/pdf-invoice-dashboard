@@ -27,6 +27,12 @@ export default function Dashboard() {
   const [isSaving, setIsSaving] = useState(false);
   const [extractionProgress, setExtractionProgress] = useState(0);
 
+  // Debug API URL
+  React.useEffect(() => {
+    console.log('API Base URL:', process.env.NEXT_PUBLIC_API_URL);
+    console.log('App URL:', process.env.NEXT_PUBLIC_APP_URL);
+  }, []);
+
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type === 'application/pdf') {
@@ -166,6 +172,23 @@ export default function Dashboard() {
                     className="mt-1 bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 text-sm"
                   />
                 </div>
+
+                {/* API Test Button */}
+                <Button 
+                  onClick={async () => {
+                    try {
+                      const response = await fetch(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api');
+                      console.log('Backend test response:', response.status);
+                      alert(`Backend ${response.ok ? 'connected' : 'failed'}: ${response.status}`);
+                    } catch (error) {
+                      console.error('Backend test error:', error);
+                      alert('Backend connection failed: ' + error);
+                    }
+                  }}
+                  className="bg-gray-600 hover:bg-gray-500 text-white text-xs"
+                >
+                  Test Backend Connection
+                </Button>
                 
                 {selectedFile && !uploadedFile && (
                   <Button 
