@@ -122,29 +122,29 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
         {/* Vendor Information */}
         <Card className="bg-gray-800/50 border-gray-700/50 backdrop-blur-sm">
-          <CardHeader className="border-b border-gray-700/50">
-            <CardTitle className="text-white">Vendor Information</CardTitle>
+          <CardHeader className="border-b border-gray-700/50 p-3 sm:p-6">
+            <CardTitle className="text-white text-base sm:text-lg">Vendor Information</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-6">
             <div>
-              <Label htmlFor="vendor.name" className="text-white">Vendor Name *</Label>
+              <Label htmlFor="vendor.name" className="text-white text-sm">Vendor Name *</Label>
               <Input
                 id="vendor.name"
                 {...register('vendor.name')}
                 placeholder="Enter vendor name"
-                className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+                className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 text-sm mt-1"
               />
               {errors.vendor?.name && (
-                <p className="text-sm text-red-400 mt-1">{errors.vendor.name.message}</p>
+                <p className="text-xs sm:text-sm text-red-400 mt-1">{errors.vendor.name.message}</p>
               )}
             </div>
             
             <div>
-              <Label htmlFor="vendor.address" className="text-white">Address</Label>
+              <Label htmlFor="vendor.address" className="text-white text-sm">Address</Label>
               <Input
                 id="vendor.address"
                 {...register('vendor.address')}

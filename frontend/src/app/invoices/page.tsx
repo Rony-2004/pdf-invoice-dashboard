@@ -79,19 +79,23 @@ export default function InvoicesPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
       {/* Header */}
       <header className="bg-black/50 backdrop-blur-xl border-b border-gray-700/50 shadow-2xl">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg">
-                <FileText className="h-8 w-8 text-white" />
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <div className="p-1.5 sm:p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg">
+                <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
-              <h1 className="text-2xl font-bold text-white">Invoice Management</h1>
+              <h1 className="text-lg sm:text-2xl font-bold text-white">
+                <span className="hidden sm:inline">Invoice Management</span>
+                <span className="sm:hidden">Invoices</span>
+              </h1>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <Link href="/">
-                <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg">
-                  <Plus className="h-4 w-4 mr-2" />
-                  New Invoice
+                <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg text-xs sm:text-sm px-2 sm:px-4">
+                  <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">New Invoice</span>
+                  <span className="sm:hidden">New</span>
                 </Button>
               </Link>
             </div>
@@ -99,20 +103,20 @@ export default function InvoicesPage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Search */}
-        <Card className="mb-6 bg-black/40 backdrop-blur-sm border-gray-700/50 shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-white text-lg">Search Invoices</CardTitle>
+        <Card className="mb-4 sm:mb-6 bg-black/40 backdrop-blur-sm border-gray-700/50 shadow-xl">
+          <CardHeader className="p-3 sm:p-6">
+            <CardTitle className="text-white text-base sm:text-lg">Search Invoices</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-3 sm:p-6 pt-0">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 sm:h-4 sm:w-4 text-gray-400" />
               <Input
                 placeholder="Search by vendor name or invoice number..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500 focus:border-blue-500"
+                className="pl-8 sm:pl-10 bg-gray-800/50 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500 focus:border-blue-500 text-sm"
               />
             </div>
           </CardContent>
@@ -120,111 +124,93 @@ export default function InvoicesPage() {
 
         {/* Invoices List */}
         <Card className="bg-black/40 backdrop-blur-sm border-gray-700/50 shadow-xl">
-          <CardHeader>
-            <CardTitle className="text-white text-lg">
+          <CardHeader className="p-3 sm:p-6">
+            <CardTitle className="text-white text-base sm:text-lg">
               Invoices ({filteredInvoices.length})
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-3 sm:p-6 pt-0">
             {isLoading ? (
-              <div className="flex items-center justify-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                <span className="ml-2 text-white">Loading invoices...</span>
+              <div className="flex items-center justify-center py-6 sm:py-8">
+                <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-blue-500"></div>
+                <span className="ml-2 text-white text-sm sm:text-base">Loading invoices...</span>
               </div>
             ) : filteredInvoices.length === 0 ? (
-              <div className="text-center py-8">
-                <FileText className="h-12 w-12 mx-auto mb-4 text-gray-500" />
-                <p className="text-white">
+              <div className="text-center py-6 sm:py-8">
+                <FileText className="h-8 w-8 sm:h-12 sm:w-12 mx-auto mb-3 sm:mb-4 text-gray-500" />
+                <p className="text-white text-sm sm:text-base">
                   {searchQuery ? 'No invoices found matching your search' : 'No invoices found'}
                 </p>
                 <Link href="/">
-                  <Button className="mt-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white">
-                    <Plus className="h-4 w-4 mr-2" />
+                  <Button className="mt-3 sm:mt-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white text-sm">
+                    <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                     Create Your First Invoice
                   </Button>
                 </Link>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-600">
-                  <thead className="bg-gray-800/50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                        Invoice Details
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                        Vendor
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                        Amount
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                        Date
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-gray-800/30 divide-y divide-gray-600">
-                    {filteredInvoices.map((invoice) => (
-                      <tr key={invoice._id} className="hover:bg-gray-700/30 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <div className="text-sm font-medium text-white">
-                              {invoice.invoice.number}
+              <div className="space-y-3 sm:space-y-4">
+                {filteredInvoices.map((invoice) => (
+                  <Card key={invoice._id} className="bg-gray-800/50 border-gray-700/50 hover:bg-gray-700/50 transition-colors">
+                    <CardContent className="p-3 sm:p-6">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-3 sm:space-y-0">
+                        <div className="flex-1 space-y-2 sm:space-y-1">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                            <div>
+                              <h3 className="text-sm sm:text-base font-medium text-white">
+                                {invoice.invoice.number}
+                              </h3>
+                              <p className="text-xs sm:text-sm text-gray-300">
+                                {invoice.fileName}
+                              </p>
                             </div>
-                            <div className="text-sm text-white">
-                              {invoice.fileName}
+                            <div className="mt-1 sm:mt-0">
+                              <p className="text-sm sm:text-base font-medium text-white">
+                                {invoice.vendor.name}
+                              </p>
+                              {invoice.vendor.address && (
+                                <p className="text-xs sm:text-sm text-gray-300 hidden sm:block">
+                                  {invoice.vendor.address.length > 30 
+                                    ? `${invoice.vendor.address.substring(0, 30)}...` 
+                                    : invoice.vendor.address}
+                                </p>
+                              )}
                             </div>
                           </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <div className="text-sm font-medium text-white">
-                              {invoice.vendor.name}
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 text-xs sm:text-sm">
+                            <div className="text-white">
+                              Date: {formatDate(invoice.invoice.date)}
                             </div>
-                            {invoice.vendor.address && (
-                              <div className="text-sm text-white">
-                                {invoice.vendor.address}
-                              </div>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-bold text-black bg-yellow-200 px-2 py-1 rounded">
-                            {formatCurrency(invoice.invoice.total, invoice.invoice.currency)}
-                          </div>
-                          {invoice.invoice.subtotal && (
-                            <div className="text-sm text-white">
-                              Subtotal: {formatCurrency(invoice.invoice.subtotal, invoice.invoice.currency)}
+                            <div className="text-black bg-yellow-200 px-2 py-1 rounded font-bold w-fit mt-1 sm:mt-0">
+                              {formatCurrency(invoice.invoice.total, invoice.invoice.currency)}
                             </div>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
-                          {formatDate(invoice.invoice.date)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex space-x-2">
-                            <Link href={`/invoices/${invoice._id}`}>
-                              <Button variant="outline" size="sm" className="bg-blue-500/20 border-blue-500 text-blue-400 hover:bg-blue-500/30">
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                            </Link>
+                          </div>
+                        </div>
+                        <div className="flex flex-row sm:flex-col space-x-2 sm:space-x-0 sm:space-y-2">
+                          <Link href={`/invoices/${invoice._id}`}>
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => handleDelete(invoice._id!)}
-                              className="bg-red-500/20 border-red-500 text-red-400 hover:bg-red-500/30"
+                              className="border-gray-600 bg-gray-700/50 text-white hover:bg-gray-600 text-xs sm:text-sm px-2 sm:px-3"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Edit className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                              <span className="hidden sm:inline">Edit</span>
                             </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                          </Link>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDelete(invoice._id!)}
+                            className="border-red-600 bg-red-600/20 text-red-400 hover:bg-red-600/30 text-xs sm:text-sm px-2 sm:px-3"
+                          >
+                            <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                            <span className="hidden sm:inline">Delete</span>
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             )}
           </CardContent>
