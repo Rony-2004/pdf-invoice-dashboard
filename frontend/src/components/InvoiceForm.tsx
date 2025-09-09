@@ -122,125 +122,117 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   };
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6">
+    <div className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Vendor Information */}
-        <Card className="bg-gray-800/50 border-gray-700/50 backdrop-blur-sm">
-          <CardHeader className="border-b border-gray-700/50 p-3 sm:p-6">
-            <CardTitle className="text-white text-base sm:text-lg">Vendor Information</CardTitle>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <div className="h-2 w-2 bg-blue-500 rounded-full"></div>
+              <span>Vendor Information</span>
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-6">
+          <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="vendor.name" className="text-white text-sm">Vendor Name *</Label>
+              <Label htmlFor="vendor.name">Vendor Name *</Label>
               <Input
                 id="vendor.name"
                 {...register('vendor.name')}
                 placeholder="Enter vendor name"
-                className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 text-sm mt-1"
+                className="mt-1"
               />
               {errors.vendor?.name && (
-                <p className="text-xs sm:text-sm text-red-400 mt-1">{errors.vendor.name.message}</p>
+                <p className="text-sm text-destructive mt-1">{errors.vendor.name.message}</p>
               )}
             </div>
             
             <div>
-              <Label htmlFor="vendor.address" className="text-white text-sm">Address</Label>
+              <Label htmlFor="vendor.address">Address</Label>
               <Input
                 id="vendor.address"
                 {...register('vendor.address')}
                 placeholder="Enter vendor address"
-                className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+                className="mt-1"
               />
             </div>
             
             <div>
-              <Label htmlFor="vendor.taxId" className="text-white">Tax ID</Label>
+              <Label htmlFor="vendor.taxId">Tax ID</Label>
               <Input
                 id="vendor.taxId"
                 {...register('vendor.taxId')}
                 placeholder="Enter tax ID"
-                className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+                className="mt-1"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Invoice Information */}
-        <Card className="bg-gray-800/50 border-gray-700/50 backdrop-blur-sm">
-          <CardHeader className="border-b border-gray-700/50">
-            <CardTitle className="text-white">Invoice Information</CardTitle>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <div className="h-2 w-2 bg-violet-500 rounded-full"></div>
+              <span>Invoice Information</span>
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="invoice.number" className="text-white">Invoice Number *</Label>
+                <Label htmlFor="invoice.number">Invoice Number *</Label>
                 <Input
                   id="invoice.number"
                   {...register('invoice.number')}
                   placeholder="Enter invoice number"
-                  className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+                  className="mt-1"
                 />
                 {errors.invoice?.number && (
-                  <p className="text-sm text-red-600 mt-1">{errors.invoice.number.message}</p>
+                  <p className="text-sm text-destructive mt-1">{errors.invoice.number.message}</p>
                 )}
               </div>
               
               <div>
-                <Label htmlFor="invoice.date" className="text-white">Invoice Date *</Label>
+                <Label htmlFor="invoice.date">Invoice Date *</Label>
                 <Input
                   id="invoice.date"
                   type="date"
                   {...register('invoice.date')}
-                  className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+                  className="mt-1"
                 />
                 {errors.invoice?.date && (
-                  <p className="text-sm text-red-600 mt-1">{errors.invoice.date.message}</p>
+                  <p className="text-sm text-destructive mt-1">{errors.invoice.date.message}</p>
                 )}
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <Label htmlFor="invoice.currency" className="text-white">Currency</Label>
+                <Label htmlFor="invoice.currency">Currency</Label>
                 <Input
                   id="invoice.currency"
                   {...register('invoice.currency')}
                   placeholder="USD"
-                  className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+                  className="mt-1"
                 />
               </div>
               
               <div>
-                <Label htmlFor="invoice.taxPercent" className="text-white">Tax Percent</Label>
-                <Input
-                  id="invoice.taxPercent"
-                  type="number"
-                  step="0.01"
-                  {...register('invoice.taxPercent', { valueAsNumber: true })}
-                  placeholder="8.5"
-                  className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
-                />
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="invoice.poNumber" className="text-white">PO Number</Label>
+                <Label htmlFor="invoice.poNumber">PO Number</Label>
                 <Input
                   id="invoice.poNumber"
                   {...register('invoice.poNumber')}
                   placeholder="Enter PO number"
-                  className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+                  className="mt-1"
                 />
               </div>
               
               <div>
-                <Label htmlFor="invoice.poDate" className="text-white">PO Date</Label>
+                <Label htmlFor="invoice.poDate">PO Date</Label>
                 <Input
                   id="invoice.poDate"
                   type="date"
                   {...register('invoice.poDate')}
-                  className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+                  className="mt-1"
                 />
               </div>
             </div>
@@ -248,11 +240,20 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         </Card>
 
         {/* Line Items */}
-        <Card className="bg-gray-800/50 border-gray-700/50 backdrop-blur-sm">
-          <CardHeader className="border-b border-gray-700/50">
-            <CardTitle className="flex items-center justify-between text-white">
-              Line Items
-              <Button type="button" onClick={addLineItem} size="sm" className="bg-blue-500/20 border-blue-500 text-blue-400 hover:bg-blue-500/30">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className="h-2 w-2 bg-emerald-500 rounded-full"></div>
+                <span>Line Items</span>
+              </div>
+              <Button 
+                type="button" 
+                onClick={addLineItem} 
+                size="sm" 
+                variant="outline"
+                className="text-xs"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Item
               </Button>
@@ -261,83 +262,96 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
           <CardContent>
             <div className="space-y-4">
               {fields.map((field, index) => (
-                <div key={field.id} className="grid grid-cols-5 gap-4 items-end">
-                  <div>
-                    <Label htmlFor={`invoice.lineItems.${index}.description`} className="text-white">Description</Label>
+                <div key={field.id} className="grid grid-cols-1 sm:grid-cols-5 gap-4">
+                  <div className="sm:col-span-2">
+                    <Label htmlFor={`invoice.lineItems.${index}.description`}>Description</Label>
                     <Input
                       {...register(`invoice.lineItems.${index}.description`)}
                       placeholder="Enter description"
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+                      className="mt-1"
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor={`invoice.lineItems.${index}.unitPrice`} className="text-white">Unit Price</Label>
+                    <Label htmlFor={`invoice.lineItems.${index}.unitPrice`}>Unit Price</Label>
                     <Input
                       type="number"
                       step="0.01"
                       {...register(`invoice.lineItems.${index}.unitPrice`, { valueAsNumber: true })}
                       placeholder="0.00"
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+                      className="mt-1"
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor={`invoice.lineItems.${index}.quantity`} className="text-white">Quantity</Label>
+                    <Label htmlFor={`invoice.lineItems.${index}.quantity`}>Quantity</Label>
                     <Input
                       type="number"
                       {...register(`invoice.lineItems.${index}.quantity`, { valueAsNumber: true })}
                       placeholder="1"
-                      className="bg-gray-700/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500"
+                      className="mt-1"
                     />
                   </div>
                   
-                  <div>
-                    <Label htmlFor={`invoice.lineItems.${index}.total`} className="text-white">Total</Label>
-                    <Input
-                      type="number"
-                      step="0.01"
-                      {...register(`invoice.lineItems.${index}.total`, { valueAsNumber: true })}
-                      readOnly
-                      className="bg-gray-50 text-black font-semibold"
-                    />
+                  <div className="flex items-end gap-2">
+                    <div className="flex-1">
+                      <Label htmlFor={`invoice.lineItems.${index}.total`}>Total</Label>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        {...register(`invoice.lineItems.${index}.total`, { valueAsNumber: true })}
+                        readOnly
+                        className="mt-1 bg-muted font-medium"
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => remove(index)}
+                      disabled={fields.length === 1}
+                      className="text-destructive hover:bg-destructive/10"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
-                  
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => remove(index)}
-                    disabled={fields.length === 1}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
                 </div>
               ))}
             </div>
             
-            {/* Totals */}
-            <div className="mt-6 pt-4 border-t">
-              <div className="grid grid-cols-3 gap-4 max-w-md ml-auto">
+            {/* Totals Section */}
+            <div className="mt-8 pt-6 border-t">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-md ml-auto">
                 <div>
-                  <Label htmlFor="invoice.subtotal" className="text-white">Subtotal</Label>
+                  <Label htmlFor="invoice.subtotal" className="text-sm font-medium">Subtotal</Label>
                   <Input
                     type="number"
                     step="0.01"
                     {...register('invoice.subtotal', { valueAsNumber: true })}
                     readOnly
-                    className="bg-gray-50 text-white"
+                    className="mt-1 bg-muted font-medium"
                   />
                 </div>
                 
                 <div>
-                  <Label htmlFor="invoice.total" className="text-white">Total</Label>
+                  <Label htmlFor="invoice.taxPercent" className="text-sm font-medium">Tax %</Label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    {...register('invoice.taxPercent', { valueAsNumber: true })}
+                    placeholder="0.00"
+                    className="mt-1"
+                  />
+                </div>
+                
+                <div className="sm:col-span-2">
+                  <Label htmlFor="invoice.total" className="text-sm font-medium">Total Amount</Label>
                   <Input
                     type="number"
                     step="0.01"
                     {...register('invoice.total', { valueAsNumber: true })}
                     readOnly
-                    className="bg-gray-50 font-bold text-black text-lg"
+                    className="mt-1 bg-primary/10 border-primary/20 font-bold text-lg text-primary"
                   />
                 </div>
               </div>
@@ -346,11 +360,11 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         </Card>
 
         {/* Action Buttons */}
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-3">
           <Button 
             type="submit" 
             disabled={isLoading}
-            className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg glow-blue"
+            className="bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700 text-white"
           >
             {isLoading ? 'Saving...' : 'Save Invoice'}
           </Button>
@@ -361,7 +375,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
               variant="destructive"
               onClick={onDelete}
               disabled={isLoading}
-              className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white shadow-lg"
             >
               Delete Invoice
             </Button>

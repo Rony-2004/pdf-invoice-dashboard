@@ -7,8 +7,20 @@ import { SimplePDFViewer } from '@/components/SimplePDFViewer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent } from '@/components/ui/card';
-import { Upload, FileText, Brain, List } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { 
+  Upload, 
+  FileText, 
+  Brain, 
+  List, 
+  CheckCircle2, 
+  AlertCircle,
+  Sparkles,
+  Eye,
+  RotateCcw
+} from 'lucide-react';
 import { apiService } from '@/lib/api';
 import { UploadResponse, ExtractResponse, Vendor, InvoiceData } from '@/types';
 import Link from 'next/link';
@@ -16,7 +28,14 @@ import Link from 'next/link';
 // Dynamic import for PDF viewer to avoid SSR issues
 const PDFViewer = dynamic(() => import('@/components/PDFViewer').then(mod => ({ default: mod.PDFViewer })), {
   ssr: false,
-  loading: () => <div className="flex items-center justify-center h-full">Loading PDF viewer...</div>
+  loading: () => (
+    <div className="flex items-center justify-center h-full">
+      <div className="text-center space-y-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-2 border-primary border-t-transparent mx-auto"></div>
+        <p className="text-muted-foreground">Loading PDF viewer...</p>
+      </div>
+    </div>
+  )
 });
 
 export default function Dashboard() {
@@ -28,26 +47,6 @@ export default function Dashboard() {
   const [isSaving, setIsSaving] = useState(false);
   const [extractionProgress, setExtractionProgress] = useState(0);
   const [pdfViewerError, setPdfViewerError] = useState(false);
-
-  // Debug API URL
-  React.useEffect(() => {
-    console.log('API Base URL:', process.env.NEXT_PUBLIC_API_URL);
-    console.log('App URL:', process.env.NEXT_PUBLIC_APP_URL);
-    
-    // Test backend connectivity immediately
-    const testBackend = async () => {
-      try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
-        console.log('Testing backend at:', apiUrl);
-        const response = await fetch(apiUrl);
-        console.log('Backend response:', response.status, response.statusText);
-      } catch (error) {
-        console.error('Backend connection error:', error);
-      }
-    };
-    
-    testBackend();
-  }, []);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -149,26 +148,29 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
-      {/* Header */}
-      <header className="bg-black/50 backdrop-blur-xl border-b border-gray-700/50 shadow-2xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+    <div className="min-h-screen bg-background">
+      {/* Modern Header */}
+      <header className="border-b bg-card/50 backdrop-blur-xl supports-[backdrop-filter]:bg-card/80 sticky top-0 z-50">
+        <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <div className="p-1.5 sm:p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg">
-                <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+            <div className="flex items-center space-x-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-violet-600 shadow-lg">
+                <FileText className="h-5 w-5 text-white" />
               </div>
-              <h1 className="text-lg sm:text-2xl font-bold text-white">
-                <span className="hidden sm:inline">PDF Invoice Dashboard</span>
-                <span className="sm:hidden">PDF Dashboard</span>
-              </h1>
+              <div>
+                <h1 className="text-xl font-semibold tracking-tight">PDF Invoice Processor</h1>
+                <p className="text-sm text-muted-foreground">AI-powered data extraction</p>
+              </div>
             </div>
-            <div className="flex items-center space-x-2 sm:space-x-4">
+            <div className="flex items-center space-x-3">
+              <Badge variant="outline" className="hidden sm:flex">
+                <Sparkles className="mr-1 h-3 w-3" />
+                Gemini AI
+              </Badge>
               <Link href="/invoices">
-                <Button variant="outline" className="border-gray-600 bg-gray-800/50 text-white hover:bg-gray-700 backdrop-blur-sm text-xs sm:text-sm px-2 sm:px-4">
-                  <List className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                  <span className="hidden sm:inline">View All Invoices</span>
-                  <span className="sm:hidden">Invoices</span>
+                <Button variant="outline" size="sm">
+                  <List className="mr-2 h-4 w-4" />
+                  View Invoices
                 </Button>
               </Link>
             </div>
@@ -176,142 +178,210 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 min-h-[calc(100vh-120px)] sm:min-h-[calc(100vh-140px)]">
+      <main className="container mx-auto px-6 py-8">
+        <div className="grid lg:grid-cols-2 gap-8 h-[calc(100vh-180px)]">
           {/* Left Panel - PDF Viewer */}
-          <div className="bg-gray-900/70 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700/50 overflow-hidden order-2 xl:order-1">
-            <div className="p-3 sm:p-4 border-b border-gray-700/50 bg-gradient-to-r from-gray-800/50 to-gray-900/50">
-              <h2 className="text-base sm:text-lg font-semibold text-white">PDF Viewer</h2>
-              
-              {/* File Upload */}
-              <div className="mt-3 sm:mt-4 space-y-3 sm:space-y-4">
-                <div>
-                  <Label htmlFor="pdf-file" className="text-white text-sm">Select PDF File (max 25MB)</Label>
-                  <Input
-                    id="pdf-file"
-                    type="file"
-                    accept=".pdf"
-                    onChange={handleFileSelect}
-                    className="mt-1 bg-gray-800/50 border-gray-600 text-white placeholder-gray-400 focus:border-blue-500 text-sm"
-                  />
-                </div>
-                
-                {selectedFile && !uploadedFile && (
-                  <Button 
-                    onClick={handleUpload} 
-                    disabled={isUploading}
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg w-full sm:w-auto text-sm"
-                  >
-                    <Upload className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
-                    {isUploading ? 'Uploading...' : 'Upload PDF'}
-                  </Button>
+          <Card className="flex flex-col overflow-hidden">
+            <CardHeader className="pb-4">
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center space-x-2">
+                  <Eye className="h-5 w-5" />
+                  <span>PDF Viewer</span>
+                </CardTitle>
+                {selectedFile && (
+                  <Badge variant="secondary" className="text-xs">
+                    {(selectedFile.size / (1024 * 1024)).toFixed(1)} MB
+                  </Badge>
                 )}
-                
+              </div>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col space-y-4">
+              {/* Upload Section */}
+              <div className="space-y-4">
+                <div className="grid w-full items-center gap-2">
+                  <Label htmlFor="pdf-upload" className="text-sm font-medium">
+                    Upload PDF Document
+                  </Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="pdf-upload"
+                      type="file"
+                      accept=".pdf"
+                      onChange={handleFileSelect}
+                      className="flex-1"
+                    />
+                    {selectedFile && !uploadedFile && (
+                      <Button onClick={handleUpload} disabled={isUploading} size="sm">
+                        {isUploading ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="mr-2 h-4 w-4" />
+                            Upload
+                          </>
+                        )}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
                 {uploadedFile && (
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                  <div className="flex gap-2">
                     <Button 
                       onClick={handleExtract} 
                       disabled={isExtracting}
-                      className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg relative overflow-hidden text-sm w-full sm:w-auto"
+                      className="bg-gradient-to-r from-blue-500 to-violet-600 hover:from-blue-600 hover:to-violet-700 text-white shadow-lg"
                     >
-                      <Brain className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                       {isExtracting ? (
-                        <div className="flex items-center justify-center w-full">
-                          <span className="hidden sm:inline">Extracting with Gemini AI...</span>
-                          <span className="sm:hidden">Extracting...</span>
-                          <div className="ml-2 h-2 w-16 sm:w-24 bg-white/20 rounded-full overflow-hidden">
-                            <div 
-                              className={`h-full bg-white transition-all duration-300 ease-out ${isExtracting ? 'animate-pulse' : ''} ${
-                                extractionProgress > 0 ? 'w-full' : 'w-0'
-                              }`}
-                            />
-                          </div>
-                          <span className="ml-2 text-xs">{Math.round(extractionProgress)}%</span>
-                        </div>
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+                          Extracting... {Math.round(extractionProgress)}%
+                        </>
                       ) : (
                         <>
-                          <span className="hidden sm:inline">Extract with Gemini AI</span>
-                          <span className="sm:hidden">Extract Data</span>
+                          <Brain className="mr-2 h-4 w-4" />
+                          Extract Data
                         </>
                       )}
                     </Button>
+                    
+                    {extractedData && (
+                      <Button variant="outline" onClick={() => {
+                        setSelectedFile(null);
+                        setUploadedFile(null);
+                        setExtractedData(null);
+                      }}>
+                        <RotateCcw className="mr-2 h-4 w-4" />
+                        Reset
+                      </Button>
+                    )}
+                  </div>
+                )}
+
+                {/* Progress Bar */}
+                {isExtracting && (
+                  <div className="space-y-2">
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div 
+                        className="bg-gradient-to-r from-blue-500 to-violet-600 h-2 rounded-full progress-bar transition-all duration-300"
+                        data-progress={Math.round(extractionProgress / 10) * 10}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground text-center">
+                      Processing with Gemini AI...
+                    </p>
                   </div>
                 )}
               </div>
-            </div>
-            
-            <div className="h-[300px] sm:h-[400px] xl:h-[calc(100%-140px)] bg-gray-800/30">
-              {pdfViewerError ? (
-                <div className="flex flex-col h-full">
-                  <div className="p-2 bg-yellow-900/30 border border-yellow-600/50 rounded-t-lg flex items-center justify-between">
-                    <p className="text-yellow-200 text-xs">Using fallback PDF viewer</p>
-                    <Button
-                      onClick={() => setPdfViewerError(false)}
-                      className="text-xs px-2 py-1 h-auto bg-blue-600 hover:bg-blue-500"
-                    >
-                      Try Advanced Viewer
-                    </Button>
+
+              <Separator />
+
+              {/* PDF Display Area */}
+              <div className="flex-1 min-h-0">
+                {pdfViewerError ? (
+                  <div className="flex flex-col h-full space-y-2">
+                    <div className="flex items-center justify-between p-2 bg-muted rounded-lg">
+                      <p className="text-sm text-muted-foreground">Simple PDF Viewer</p>
+                      <Button
+                        onClick={() => setPdfViewerError(false)}
+                        variant="outline"
+                        size="sm"
+                      >
+                        Try Advanced
+                      </Button>
+                    </div>
+                    <div className="flex-1">
+                      <SimplePDFViewer file={selectedFile} />
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <SimplePDFViewer file={selectedFile} />
+                ) : (
+                  <div className="flex flex-col h-full space-y-2">
+                    <div className="flex items-center justify-between p-2 bg-muted rounded-lg">
+                      <p className="text-sm text-muted-foreground">Advanced PDF Viewer</p>
+                      <Button
+                        onClick={() => setPdfViewerError(true)}
+                        variant="outline"
+                        size="sm"
+                      >
+                        Use Simple
+                      </Button>
+                    </div>
+                    <div className="flex-1">
+                      <PDFViewer 
+                        file={selectedFile} 
+                        onError={() => {
+                          console.log('PDF Viewer failed, switching to Simple PDF Viewer');
+                          setPdfViewerError(true);
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Right Panel - Invoice Form */}
+          <Card className="flex flex-col overflow-hidden">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center space-x-2">
+                <FileText className="h-5 w-5" />
+                <span>Invoice Data</span>
+                {extractedData && (
+                  <Badge variant="default" className="ml-auto">
+                    <CheckCircle2 className="mr-1 h-3 w-3" />
+                    Extracted
+                  </Badge>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 overflow-auto">
+              {!uploadedFile && !extractedData ? (
+                <div className="flex flex-col items-center justify-center h-full text-center space-y-6">
+                  <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
+                    <Brain className="h-10 w-10 text-muted-foreground" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-semibold">Ready to Extract</h3>
+                    <p className="text-muted-foreground max-w-md">
+                      Upload a PDF invoice and click &ldquo;Extract Data&rdquo; to automatically extract vendor and invoice information using AI.
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                    <Sparkles className="h-4 w-4" />
+                    <span>Powered by Google Gemini AI</span>
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col h-full">
-                  <div className="p-2 bg-gray-800/50 border-b border-gray-700/50 flex items-center justify-between">
-                    <p className="text-gray-300 text-xs">Advanced PDF viewer</p>
-                    <Button
-                      onClick={() => setPdfViewerError(true)}
-                      className="text-xs px-2 py-1 h-auto bg-gray-600 hover:bg-gray-500"
-                    >
-                      Use Simple Viewer
-                    </Button>
-                  </div>
-                  <div className="flex-1">
-                    <PDFViewer 
-                      file={selectedFile} 
-                      onError={() => {
-                        console.log('PDF Viewer failed, switching to Simple PDF Viewer');
-                        setPdfViewerError(true);
-                      }}
+                <div className="space-y-6">
+                  {uploadedFile && !extractedData && (
+                    <div className="flex items-center justify-center p-8 border-2 border-dashed border-muted-foreground/25 rounded-lg">
+                      <div className="text-center space-y-2">
+                        <AlertCircle className="h-8 w-8 text-muted-foreground mx-auto" />
+                        <p className="text-muted-foreground">
+                          Click &ldquo;Extract Data&rdquo; to analyze the PDF
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {extractedData && (
+                    <InvoiceForm
+                      extractedData={extractedData}
+                      onSave={handleSave}
+                      isLoading={isSaving}
                     />
-                  </div>
+                  )}
                 </div>
               )}
-            </div>
-          </div>
-
-          {/* Right Panel - Invoice Form */}
-          <div className="bg-gray-900/70 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-700/50 overflow-auto order-1 xl:order-2">
-            <div className="p-3 sm:p-4 border-b border-gray-700/50 bg-gradient-to-r from-gray-800/50 to-gray-900/50">
-              <h2 className="text-base sm:text-lg font-semibold text-white">Invoice Data</h2>
-            </div>
-            
-            <div className="p-3 sm:p-4">
-              {!extractedData && !uploadedFile && (
-                <Card className="bg-gray-800/50 border-gray-700/50">
-                  <CardContent className="pt-4 sm:pt-6">
-                    <div className="text-center text-white">
-                      <div className="p-3 sm:p-4 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-full w-fit mx-auto mb-3 sm:mb-4">
-                        <Brain className="h-8 w-8 sm:h-12 sm:w-12 mx-auto text-blue-400" />
-                      </div>
-                      <p className="text-sm sm:text-lg">Upload a PDF and extract data to see the invoice form</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-              
-              {uploadedFile && (
-                <InvoiceForm
-                  extractedData={extractedData || undefined}
-                  onSave={handleSave}
-                  isLoading={isSaving}
-                />
-              )}
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
